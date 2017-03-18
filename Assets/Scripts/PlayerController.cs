@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour {
     Text healthText;
     GameObject player;
     Transform transform;
+    InventoryScript inv;
 
     void Start() {
         player = GameObject.FindGameObjectsWithTag("Player")[0];
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour {
         healthBar = hud.transform.FindChild("HealthBar").GetComponent<Slider>();
         healthText = healthBar.transform.gameObject.transform.FindChild("HealthText").GetComponent<Text>();
         lowHealthOverlay = hud.transform.FindChild("LowHealth").gameObject;
+        inv = transform.GetComponent<InventoryScript>();
     }
 
     void Update() {

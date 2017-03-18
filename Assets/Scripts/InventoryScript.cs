@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InventoryScript : MonoBehaviour {
 
+    public List<Item.ItemType> items = new List<Item.ItemType>();
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,4 +15,13 @@ public class InventoryScript : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.GetComponent<Item>() != null) {
+            var item = collision.gameObject.GetComponent<Item>();
+            items.Add(item.type);
+            Destroy(collision.gameObject);
+        }
+        
+    }
 }

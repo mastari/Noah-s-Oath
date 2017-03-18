@@ -32,6 +32,9 @@ public class StartScript : MonoBehaviour {
         cam.transform.parent = player.transform;
         cam.transform.position = new Vector3(0, 1, 0);
 
-        GameObject.Find("HUD").transform.parent = player.transform;
+        var inv = player.AddComponent<InventoryScript>();
+
+
+        GameObject.Find("HUD").transform.SetParent(player.transform);
     }
 }
