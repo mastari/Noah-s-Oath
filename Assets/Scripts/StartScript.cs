@@ -25,12 +25,18 @@ public class StartScript : MonoBehaviour {
         var controller = player.AddComponent<PlayerController>();
         controller.jumpSpeed = jumpSpeed;
         controller.bulletTime = bulletTime;
-        controller.lockCursor = lockCursor;
-        controller.movementspeed = movementSpeed;
+        controller.mspeed = movementSpeed;
 
         var cam = Camera.main;
+        cam.gameObject.AddComponent<CameraController>();
         cam.transform.parent = player.transform;
         cam.transform.position = new Vector3(0, 1, 0);
+
+        var cc = cam.GetComponent<CameraController>();
+        cc.target = player.transform;
+        cc.speed = 100f;
+        cc.lockCursor = lockCursor;
+        
 
         var inv = player.AddComponent<InventoryScript>();
 

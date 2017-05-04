@@ -4,33 +4,31 @@ using System;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
+    
+    public float mspeed = 10;
+    public float speed = 0;
+    float smultiplier = 2f;
 
-    public bool lockCursor = true;
-    public float movementspeed = 10;
     public float jumpSpeed = 100;
     public float bulletTime = 1000;
 
     bool isShooting;
     float lastTick, millisecond;
+    public bool isSprinting;
 
     LineRenderer lr;
     Rigidbody rb;
     GameObject cam, hud, lowHealthOverlay;
-    Vector2 sensitivity = new Vector2(1, 1);
-    Vector2 smoothing = new Vector2(3, 3);
-    Vector2 clampInDegrees = new Vector2(360, 180);
-    Vector2 targetDirection, targetCharacterDirection, _mouseAbsolute, _smoothMouse;
+    Vector2 targetDirection, targetCharacterDirection;
     ObjectHealth health;
     Vector3 spawnpoint;
     Slider healthBar;
     Text healthText;
     GameObject player;
-    Transform transform;
     InventoryScript inv;
 
     void Start() {
         player = GameObject.FindGameObjectsWithTag("Player")[0];
-        transform = player.transform;
         rb = GetComponent<Rigidbody>();
         cam = Camera.main.gameObject;
         targetDirection = cam.transform.localRotation.eulerAngles;
@@ -48,7 +46,6 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         ManageHealth();
-        Look();
         Move();
         Jump();
         Shoot();
@@ -72,29 +69,11 @@ public class PlayerController : MonoBehaviour {
         UpdateHealthSlider();
     }
 
-    void Look() {
-        Cursor.visible = lockCursor;
-        Cursor.lockState = CursorLockMode.Locked;
-        var targetOrientation = Quaternion.Euler(targetDirection);
-        var targetCharacterOrientation = Quaternion.Euler(targetCharacterDirection);
-        var mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-        mouseDelta = Vector2.Scale(mouseDelta, new Vector2(sensitivity.x * smoothing.x, sensitivity.y * smoothing.y));
-        _smoothMouse.x = Mathf.Lerp(_smoothMouse.x, mouseDelta.x, 1f / smoothing.x);
-        _smoothMouse.y = Mathf.Lerp(_smoothMouse.y, mouseDelta.y, 1f / smoothing.y);
-        _mouseAbsolute += _smoothMouse;
-        if (clampInDegrees.x < 360) _mouseAbsolute.x = Mathf.Clamp(_mouseAbsolute.x, -clampInDegrees.x * 0.5f, clampInDegrees.x * 0.5f);
-        var xRotation = Quaternion.AngleAxis(-_mouseAbsolute.y, targetOrientation * Vector3.right);
-        cam.transform.localRotation = xRotation;
-        if (clampInDegrees.y < 360) _mouseAbsolute.y = Mathf.Clamp(_mouseAbsolute.y, -clampInDegrees.y * 0.5f, clampInDegrees.y * 0.5f);
-        cam.transform.localRotation *= targetOrientation;
-        var yRotation = Quaternion.AngleAxis(_mouseAbsolute.x, transform.up);
-        transform.localRotation = yRotation;
-        transform.localRotation *= targetCharacterOrientation;
-        if (cam.transform.position.y < -100) health.UpdateHealth(-10);
-    }
-
     void Move() {
         if (Input.GetKey(KeyCode.W)) {
+            speed = mspeed;
+            isSprinting = Input.GetKey(KeyCode.LeftShift);
+            if (isSprinting) speed *= smultiplier; else speed = mspeed;
             MoveVec(Vector3.forward * Time.deltaTime * moveLength(cam.transform.forward));
         }
         if (Input.GetKey(KeyCode.A)) {
@@ -106,6 +85,7 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(KeyCode.D)) {
             MoveVec(Vector3.right * Time.deltaTime * moveLength(cam.transform.right));
         }
+        if (cam.transform.position.y < -100) health.UpdateHealth(-10);
     }
 
     void Shoot() {
@@ -129,12 +109,15 @@ public class PlayerController : MonoBehaviour {
     }
 
     void MoveVec(Vector3 pos) {
+        
+        transform.rotation = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0);
+        
         transform.Translate(pos);
     }
 
     float moveLength(Vector3 direction) {
-        return movementspeed; //COMMENT OUT WHEN FIXING
-        for (var i = movementspeed * 1; i >= 0; i -= 1) {
+        return speed; //COMMENT OUT WHEN FIXING
+        for (var i = mspeed * 1; i >= 0; i -= 1) {
             
             RaycastHit[] box = Physics.BoxCastAll(transform.position, transform.localScale, direction, new Quaternion(), i);
             ExtDebug.DrawBoxCastBox(transform.position + new Vector3(0, 0.1f, 0), transform.localScale / 2, new Quaternion(), direction, i, Color.cyan);
@@ -169,7 +152,7 @@ public class PlayerController : MonoBehaviour {
 
     bool isGrounded() {
         RaycastHit[] below = Physics.BoxCastAll(transform.position, new Vector3(0.5f, 0.5f, 0.5f), Vector3.down, GetComponent<Transform>().rotation, 0.05f);
-        return Array.Exists(below, e => e.transform.GetComponent<Collider>().name != "Player");
+        return Array.Exists(below, e => !e.transform.GetComponent<Collider>().name.Contains("Player"));
     }
 
     void UpdateHealthSlider() {
