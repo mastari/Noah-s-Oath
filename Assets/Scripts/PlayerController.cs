@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        if (MenuScript.paused) return;
         ManageHealth();
         Move();
         Jump();

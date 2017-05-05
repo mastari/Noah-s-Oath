@@ -41,11 +41,13 @@ public class CameraController : MonoBehaviour {
     }
 
     public void Update() {
+        if (MenuScript.paused) return;
         Cursor.visible = lockCursor;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     void LateUpdate() {
+        if (MenuScript.paused) return;
         if (target) {
             x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;
             y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
