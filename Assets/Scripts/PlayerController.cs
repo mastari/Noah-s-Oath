@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     
@@ -85,6 +86,12 @@ public class PlayerController : MonoBehaviour {
             MovePlayer(Vector3.right * GetMoveLength(cam.transform.right));
         }
         if (cam.transform.position.y < -100) health.UpdateHealth(-10);
+
+        if (Input.GetKeyDown(KeyCode.Backspace)) {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("StartScene");
+        }
     }
 
     void Shoot() {
@@ -108,7 +115,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     void MovePlayer(Vector3 pos) {
-        Debug.Log(cam.transform.eulerAngles.y);
         transform.rotation = forward;
         transform.Translate(pos * Time.deltaTime);
     }
