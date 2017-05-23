@@ -22,8 +22,8 @@ public class MenuScript : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             Pause(!paused);
-            Debug.Log("Paused");
         }
+        Cursor.visible = false;
         if (paused) {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
