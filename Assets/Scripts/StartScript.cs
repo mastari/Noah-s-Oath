@@ -8,17 +8,29 @@ public class StartScript : MonoBehaviour {
     public float bulletTime;
     public float movementSpeed;
     public bool lockCursor;
-                                                                                                                      
-    public float maxHealth;
-                                                                                       
-	void Start () {
-        GameObject Player = Instantiate(Resources.Load("Player") as GameObject);
+    public static GameObject camera;
+    public static List<GameObject> Animals = new List<GameObject>();
 
-        var ac = new AnimalClass("Lion", Player);
+
+    public float maxHealth;
+
+    void Start() {
+        camera = GameObject.Find("Main Camera");
+
+        var ac = new AnimalClass("Lion");
         ac.Move(movementSpeed);
         ac.Jump(jumpSpeed);
-        ac.Shoot(bulletTime);
-        
-        GameObject.Find("HUD").transform.SetParent(Player.transform);
+        GameObject acgo = ac.GetPlayer();
+        Animals.Add(acgo);
+
+
+        var cc = new AnimalClass("Cube");
+        cc.Move(movementSpeed);
+        cc.Jump(jumpSpeed);
+        GameObject ccgo = cc.GetPlayer();
+        Animals.Add(ccgo);
+        acgo.SetActive(false);
+
+        //GameObject.Find("HUD").transform.SetParent(Player.transform);
     }
 }

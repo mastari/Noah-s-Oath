@@ -11,7 +11,7 @@ public class ObjectHealth : MonoBehaviour {
 
     void Start() {
         health = maxHealth;
-        healthBar = transform.Find("HUD").Find("Background").Find("Foreground").GetComponent<RectTransform>();
+        healthBar = GameObject.Find("HUD").transform.Find("Background").Find("Foreground").GetComponent<RectTransform>();
     }
 
     public void UpdateHealth(float amount) {

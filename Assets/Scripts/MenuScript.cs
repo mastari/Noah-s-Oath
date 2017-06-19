@@ -9,6 +9,7 @@ public class MenuScript : MonoBehaviour {
     public static bool paused;
     public GameObject menu;
     public Button back, options, leave, quit;
+    public Button changeAnimal;
 
  
 	void Start () {
@@ -17,6 +18,7 @@ public class MenuScript : MonoBehaviour {
         options.onClick.AddListener(Options);
         leave.onClick.AddListener(Leave);
         quit.onClick.AddListener(Quit);
+        changeAnimal.onClick.AddListener(ChangeAnimal);
 	}
 
     void Update() {
@@ -50,4 +52,53 @@ public class MenuScript : MonoBehaviour {
     public void Quit() {
         Application.Quit();
     }
+
+    public static void ChangeAnimal() {
+        
+        List<string> AnimalTypes = AnimalClass.Animals;
+        
+        GameObject currentAnimal = null;
+        var num = 0;
+
+        foreach (string type in AnimalTypes) {
+            var animal = GameObject.Find(type);
+            if (animal != null && animal.active) {
+                currentAnimal = GameObject.Find(type);
+                break;
+            }
+            num++;
+        }
+        //currentAnimal = Camera.main.gameObject.transform.parent.gameObject;
+        if (currentAnimal == null) {
+            return;
+        }
+
+        //change num
+        if (num == AnimalTypes.Count-1) {
+            num = 0;
+        } else {
+            num++;
+        }
+
+        //GameObject nextAnimal = GameObject.Find(AnimalTypes[num]);
+        GameObject nextAnimal = StartScript.Animals.Find(i => i.gameObject.name == AnimalTypes[num]);
+
+        var cam = StartScript.camera;
+        cam.SetActive(true);
+        cam.name = cam.name.Substring(0, cam.name.Length);
+
+        //cam.gameObject.AddComponent<CameraController>();
+        cam.transform.parent = nextAnimal.transform;
+        cam.transform.position = new Vector3(0, 1, 0);
+
+        var cc = cam.GetComponent<CameraController>();
+        cc.target = nextAnimal.transform;
+        cc.speed = 100f;
+        cc.lockCursor = true;
+        
+        currentAnimal.SetActive(false);
+        nextAnimal.SetActive(true);
+        nextAnimal.transform.position = currentAnimal.transform.position + new Vector3(0, 1, 0);
+        
+    } 
 }

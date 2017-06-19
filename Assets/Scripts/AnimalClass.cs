@@ -8,10 +8,12 @@ public class AnimalClass : MonoBehaviour {
     public GameObject Player;
     public static List<string> Animals = new List<string>();
 
-    public AnimalClass (string AnimalType, GameObject Player) {
+    public AnimalClass (string AnimalType) {
         this.AnimalType = AnimalType;
-        this.Player = Player;
         Animals.Add(this.AnimalType);
+        Player = Instantiate(Resources.Load(this.AnimalType) as GameObject);
+
+        Player.name = AnimalType.Substring(0, AnimalType.Length);
 
         Player.transform.position = new Vector3(0, 0.5f, 0);
 
@@ -44,15 +46,34 @@ public class AnimalClass : MonoBehaviour {
     }
 
     public void SetupCamera (bool LockCursor) {
-        var cam = Camera.main;
-        cam.gameObject.AddComponent<CameraController>();
-        cam.transform.parent = Player.transform;
-        cam.transform.position = new Vector3(0, 1, 0);
+        //var cam = Camera.main;
+        //var cam = new GameObject("Camera");
+        //cam.AddComponent<Transform>();
+        //cam.AddComponent<Camera>();
+        //cam.AddComponent<GUILayer>();
+        //cam.AddComponent<FlareLayer>();
+        //cam.AddComponent<AudioListener>();
+        //var lr = cam.AddComponent<LineRenderer>();
+        //lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        //lr.receiveShadows = false;
+        //lr.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
+        //lr.size
+        //var cam = Instantiate(StartScript.camera);
+        //cam.SetActive(true);
+        //cam.name = cam.name.Substring(0, cam.name.Length);
 
-        var cc = cam.GetComponent<CameraController>();
-        cc.target = Player.transform;
-        cc.speed = 100f;
-        cc.lockCursor = LockCursor;
+        ////cam.gameObject.AddComponent<CameraController>();
+        //cam.transform.parent = Player.transform;
+        //cam.transform.position = new Vector3(0, 1, 0);
+
+        //var cc = cam.GetComponent<CameraController>();
+        //cc.target = Player.transform;
+        //cc.speed = 100f;
+        //cc.lockCursor = LockCursor;
+
+        Camera.main.GetComponent<CameraController>().target = Player.transform;
+        Camera.main.transform.parent = Player.transform;
+        Camera.main.transform.position = new Vector3(0, 1, 0);
     }
 
     public void ManageInventory () {
