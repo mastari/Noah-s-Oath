@@ -89,7 +89,10 @@
     <Compile Include="Assets\Scripts\Player Actions\Manage Health.cs" />
     <Compile Include="Assets\Scripts\Player Actions\Move.cs" />
     <Compile Include="Assets\Scripts\Player Actions\Shoot.cs" />
-    <Compile Include="Assets\Scripts\StartScene.cs" />
+    <Compile Include="Assets\Scripts\Questing\QuestIntro.cs" />
+    <Compile Include="Assets\Scripts\Questing\QuestNPC.cs" />
+    <Compile Include="Assets\Scripts\SaveFile.cs" />
+    <Compile Include="Assets\Scripts\StartScene\StartScene.cs" />
     <Compile Include="Assets\Scripts\StartScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

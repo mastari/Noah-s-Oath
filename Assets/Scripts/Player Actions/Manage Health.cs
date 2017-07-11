@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ManageHealth : MonoBehaviour {
 
+
     ObjectHealth health;
+
     Vector3 spawnpoint;
 
     // Use this for initialization
@@ -17,6 +19,9 @@ public class ManageHealth : MonoBehaviour {
 	void Update () {
         if (health.GetHealth() == 0) {
             Respawn();
+        }
+        if (gameObject.transform.position.y < -100) {
+            health.UpdateHealth(-10);
         }
     }
 

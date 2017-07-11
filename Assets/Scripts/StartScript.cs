@@ -23,13 +23,22 @@ public class StartScript : MonoBehaviour {
         GameObject acgo = ac.GetPlayer();
         Animals.Add(acgo);
 
-
+        var leemur = new AnimalClass("Leemur");
+        //leemur.Move(movementSpeed);
+        leemur.Jump(jumpSpeed);
+        GameObject leemurthing = leemur.GetPlayer();
+        Animals.Add(leemurthing);
+        
         var cc = new AnimalClass("Cube");
         cc.Move(movementSpeed);
         cc.Jump(jumpSpeed);
         GameObject ccgo = cc.GetPlayer();
         Animals.Add(ccgo);
+
         acgo.SetActive(false);
+        leemurthing.SetActive(false);
+
+        PlayerPrefs.SetInt("test", 1);
 
         //GameObject.Find("HUD").transform.SetParent(Player.transform);
     }

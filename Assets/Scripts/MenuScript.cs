@@ -11,6 +11,8 @@ public class MenuScript : MonoBehaviour {
     public Button back, options, leave, quit;
     public Button changeAnimal;
 
+    public static GameObject currentAnimal;
+
  
 	void Start () {
         Pause(false);
@@ -50,6 +52,15 @@ public class MenuScript : MonoBehaviour {
     }
 
     public void Quit() {
+        var s = new SaveFile();
+        s.HealthData = new HealthData();
+        s.HealthData.Health = currentAnimal.GetComponent<ObjectHealth>().GetHealth();
+
+        s.LocationData = new LocationData();
+        s.LocationData.Location = currentAnimal.transform.position;
+
+        SaveFile.Save(s, "save.xml");
+
         Application.Quit();
     }
 
@@ -57,7 +68,7 @@ public class MenuScript : MonoBehaviour {
         
         List<string> AnimalTypes = AnimalClass.Animals;
         
-        GameObject currentAnimal = null;
+        currentAnimal = null;
         var num = 0;
 
         foreach (string type in AnimalTypes) {
