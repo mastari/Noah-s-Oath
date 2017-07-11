@@ -31,6 +31,7 @@ public class ObjectHealth : MonoBehaviour {
 
     public void F() {
         health = Mathf.Max(health, 0);
+        Debug.Log(healthBar);
         healthBar.sizeDelta = new Vector2(health, healthBar.sizeDelta.y);
     }
 

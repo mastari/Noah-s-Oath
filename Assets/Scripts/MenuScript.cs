@@ -15,6 +15,7 @@ public class MenuScript : MonoBehaviour {
 
  
 	void Start () {
+        currentAnimal = StartScript.currentAnimal;
         Pause(false);
         back.onClick.AddListener(Back);
         options.onClick.AddListener(Options);
@@ -52,6 +53,7 @@ public class MenuScript : MonoBehaviour {
     }
 
     public void Quit() {
+
         var s = new SaveFile();
         s.HealthData = new HealthData();
         s.HealthData.Health = currentAnimal.GetComponent<ObjectHealth>().GetHealth();
